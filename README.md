@@ -50,20 +50,22 @@
 
 ## items テーブル
 
-| Column            | Type       | Options                        |
-| ----------------- | ---------- | ------------------------------ |
-| name              | string     | null: false                    |
-| description       | text       | null: false                    |
-| category_id       | integer    | null: false                    |
-| price             | integer    | null: false                    |
-| item_status       | string     | null: false                    |
-| delivery_fee      | integer    | null: false                    |
-| date_of_shipment  | string     | null: false                    |
-| image             | string     | null: false                    |
-| user              | references | null: false, foreign_key: true |
+| Column              | Type       | Options                        |
+| ------------------- | ---------- | ------------------------------ |
+| name                | string     | null: false                    |
+| description         | text       | null: false                    |
+| category_id         | integer    | null: false                    |
+| price               | integer    | null: false                    |
+| item_status_id      | integer    | null: false                    |
+| delivery_fee_id     | integer    | null: false                    |
+| date_of_shipment_id | integer    | null: false                    |
+| user                | references | null: false, foreign_key: true |
 
 ### Association
 
 - has_one    :purchase
 - belongs_to :user
 - belongs_to_active_hash :category
+- belongs_to_active_hash :item_status
+- belongs_to_active_hash :date_of_shipment
+- belongs_to_active_hash :delivery_fee_id
