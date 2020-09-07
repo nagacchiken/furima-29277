@@ -4,4 +4,5 @@ class Item < ApplicationRecord
   belongs_to_active_hash :date_of_shipment
   belongs_to_active_hash :delivery_fee
   belongs_to_active_hash :item_status
+  belongs_to_active_hash :prefecture
 end
