@@ -60,7 +60,7 @@
 | delivery_fee_id     | integer    | null: false                    |
 | date_of_shipment_id | integer    | null: false                    |
 | user                | references | null: false, foreign_key: true |
-| shipping_region_id  | integer    | null: false                    |
+| prefecture_id       | integer    | null: false                    |
 
 ### Association
 
