@@ -60,6 +60,7 @@
 | delivery_fee_id     | integer    | null: false                    |
 | date_of_shipment_id | integer    | null: false                    |
 | user                | references | null: false, foreign_key: true |
+| shipping_region_id  | integer    | null: false                    |
 
 ### Association
 
@@ -69,3 +70,4 @@
 - belongs_to_active_hash :item_status
 - belongs_to_active_hash :date_of_shipment
 - belongs_to_active_hash :delivery_fee_id
+- belongs_to_active_hash :prefecture
