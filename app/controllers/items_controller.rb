@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
-  before_action :move_to_index, except: [:index, :show, :new, :create]
+  before_action :move_to_index, except: [:index, :show, :new, :create,:transactions]
 
   def index
     @items = Item.all
@@ -42,6 +42,10 @@ class ItemsController < ApplicationController
    else
     render :show
    end
+  end
+
+  def transactions
+    @item = Item.find(params[:id])
   end
 
   private
