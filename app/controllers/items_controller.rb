@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
-  before_action :move_to_index, except: [:index, :show, :new, :create,:transactions]
+  before_action :move_to_index, except: [:index, :show, :new, :create,:transactions, :transactions_create]
 
   def index
     @items = Item.all
@@ -44,14 +44,25 @@ class ItemsController < ApplicationController
    end
   end
 
-  def transactions
+  def transactions 
     @item = Item.find(params[:id])
+  end
+
+  def transactions_create
+    @purchase = UserPurchase.new(purchase_params)
+    if @purchase.valid?
+      @purchase.save
+      return redirect_to root_path
+    else
+      render :transactions
+    end
   end
 
   private
 
   def item_params
-    params.require(:item).permit(:image, :name, :description, :category_id, :price, :item_status_id, :delivery_fee_id, :date_of_shipment_id, :prefecture_id).merge(user_id: current_user.id)
+    params.require(:item).permit(:image, :name, :description, :category_id, :price, :item_status_id, :delivery_fee_id, :date_of_shipment_id, :prefecture_id
+    ).merge(user_id: current_user.id)
   end
 
   def move_to_index
@@ -59,5 +70,10 @@ class ItemsController < ApplicationController
     unless user_signed_in? && current_user.id == @item.user.id
       redirect_to action: :index
     end
+  end
+
+  def purchase_params
+    @item = Item.find(params[:id])
+    params.permit(:postal_code, :prefecture_id, :city, :address, :building_name, :phone_number).merge(item_id:@item.id, user_id: current_user.id)
   end
 end
