@@ -8,11 +8,13 @@
     </h2>
     <div class='item-img-content'>
       <%= image_tag @item.image ,class:"item-box-img" %>
-      <%unless @item.present?%>
-      <div class='sold-out'>
-        <span>Sold Out!!</span>
-      </div>
-      <%end%>
+      <%if @item.purchase.present?%>
+        <%if @item.id == @item.purchase.item_id%>
+          <div class='sold-out'>
+            <span>Sold Out!!</span>
+          </div>
+        <%end%>
+        <%end%>
     </div>
     <div class="item-price-box">
       <span class="item-price">
@@ -22,14 +24,19 @@
         (税込) 送料込み
       </span>
     </div>
+  
+    <%unless @item.purchase.present?%>
 
-    <%if user_signed_in? && current_user.id == @item.user.id%>
-    <%= link_to '商品の編集', edit_item_path, method: :get, class: "item-red-btn" %>
-    <p class='or-text'>or</p>
-    <%= link_to '削除', item_path, method: :delete, class:'item-destroy' %>
-    <%elsif user_signed_in? && @item.present?%>
-    <%= link_to '購入画面に進む', transactions_item_path(@item.id) ,class:"item-red-btn"%>
+      <%if user_signed_in? && current_user.id == @item.user.id %>
+        <%= link_to '商品の編集', edit_item_path, method: :get, class: "item-red-btn" %>
+        <p class='or-text'>or</p>
+        <%= link_to '削除', item_path, method: :delete, class:'item-destroy' %>
+      <%elsif user_signed_in? %>
+          <%= link_to '購入画面に進む', transactions_item_path(@item.id) ,class:"item-red-btn"%>
+      <%end%>
+      
     <%end%>
+    
     <div class="item-explain-box">
       <span><%= @item.description %></span>
     </div>

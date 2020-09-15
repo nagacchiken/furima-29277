@@ -1,9 +1,10 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :transactions, :transactions_create]
   before_action :move_to_index, except: [:index, :show, :new, :create,:transactions, :transactions_create]
-
+  before_action :move_to_index_sell, only: [:transactions, :transactions_create]
   def index
     @items = Item.all
+    @purchases = Purchase.all
   end
 
   def new
@@ -72,6 +73,16 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     unless user_signed_in? && current_user.id == @item.user.id
       redirect_to action: :index
+    end
+  end
+
+  def move_to_index_sell
+    @item = Item.find(params[:id])
+    if current_user.id == @item.user.id 
+        redirect_to action: :index
+    end
+    if @item.purchase.present?
+        redirect_to action: :index
     end
   end
 
