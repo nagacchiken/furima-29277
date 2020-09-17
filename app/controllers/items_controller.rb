@@ -80,10 +80,11 @@ class ItemsController < ApplicationController
   def move_to_index_sell
     @item = Item.find(params[:id])
     if current_user.id == @item.user.id 
-        redirect_to action: :index
+        redirect_to action: :index 
+      return
     end
     if @item.purchase.present?
-        redirect_to action: :index
+        redirect_to action: :index 
     end
   end
 
