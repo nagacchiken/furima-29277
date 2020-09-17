@@ -7,6 +7,7 @@ class Item < ApplicationRecord
   belongs_to_active_hash :prefecture
   belongs_to :user
   has_one_attached :image
+  has_one :purchase
 
   validates :image, :name, :description, :price, presence: true
   validates :category_id, :item_status_id, :delivery_fee_id, :date_of_shipment_id, :prefecture_id, exclusion: { in: [1] }
