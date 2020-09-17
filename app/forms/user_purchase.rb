@@ -1,9 +1,20 @@
 class UserPurchase
 
   include ActiveModel::Model
-  attr_accessor :postal_code, :prefecture_id, :city, :address, :building_name, :phone_number, :item_id, :user_id, :purchase_id, :token, :price
-
+  attr_accessor :postal_code, :prefecture_id, :city, :address, :building_name, :phone_number, :item_id, :user_id, :purchase_id, :price,:token
   
+
+
+  with_options presence: true do
+    # カード情報
+    validates :token
+    # 配送先住所
+    validates :postal_code,format: { with: /\A\d{3}[-]\d{4}\z/ }
+    validates :city
+    validates :address
+    validates :phone_number,format: { with: /\A[0-9]+\z/ }
+    validates :prefecture_id, exclusion: { in: [1] }
+  end
 
   def save
     
