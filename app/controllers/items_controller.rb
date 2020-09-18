@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :transactions, :transactions_create]
-  before_action :move_to_index, except: [:index, :show, :new, :create,:transactions, :transactions_create]
+  before_action :move_to_index, except: [:index, :show, :new, :create, :transactions, :transactions_create]
   before_action :move_to_index_sell, only: [:transactions, :transactions_create]
   def index
     @items = Item.all
@@ -38,26 +38,25 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-   if @item.destroy
-    redirect_to root_path
-   else
-    render :show
-   end
+    if @item.destroy
+      redirect_to root_path
+    else
+      render :show
+    end
   end
 
-  def transactions 
+  def transactions
     @item = Item.find(params[:id])
     @purchase = UserPurchase.new
-    
   end
 
   def transactions_create
     @purchase = UserPurchase.new(purchase_params)
-    
+
     if @purchase.valid?
       pay_item
       @purchase.save
-      return redirect_to root_path
+      redirect_to root_path
     else
       render :transactions
     end
@@ -66,39 +65,35 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:image, :name, :description, :category_id, :price, :item_status_id, :delivery_fee_id, :date_of_shipment_id, :prefecture_id
-    ).merge(user_id: current_user.id)
+    params.require(:item).permit(:image, :name, :description, :category_id, :price, :item_status_id, :delivery_fee_id, :date_of_shipment_id, :prefecture_id).merge(user_id: current_user.id)
   end
 
   def move_to_index
     @item = Item.find(params[:id])
-    unless user_signed_in? && current_user.id == @item.user.id
-      redirect_to action: :index
-    end
+    redirect_to action: :index unless user_signed_in? && current_user.id == @item.user.id
   end
 
   def move_to_index_sell
     @item = Item.find(params[:id])
-    if current_user.id == @item.user.id 
-        redirect_to action: :index 
+    if current_user.id == @item.user.id
+      redirect_to action: :index
       return
     end
-    if @item.purchase.present?
-        redirect_to action: :index 
-    end
+    redirect_to action: :index if @item.purchase.present?
   end
 
   def purchase_params
     @item = Item.find(params[:id])
-    params.require(:user_purchase).permit(:token,:postal_code, :prefecture_id, :city, :address, :building_name, :phone_number).merge(price:@item.price,item_id:@item.id, user_id: current_user.id)
+    params.require(:user_purchase).permit(:token, :postal_code, :prefecture_id, :city, :address, :building_name, :phone_number).merge(price: @item.price, item_id: @item.id, user_id: current_user.id)
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    binding.pry
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
-      amount: purchase_params[:price], 
-      card: purchase_params[:token], 
-      currency:'jpy' 
+      amount: purchase_params[:price],
+      card: purchase_params[:token],
+      currency: 'jpy'
     )
   end
 end

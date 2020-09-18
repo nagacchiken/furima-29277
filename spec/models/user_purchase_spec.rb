@@ -20,15 +20,15 @@ RSpec.describe UserPurchase, type: :model do
       expect(@user_purchase.errors.full_messages).to include("Postal code can't be blank")
     end
     it 'postal_codeにハイフンがないと保存できないこと' do
-      @user_purchase.postal_code = "1234567"
+      @user_purchase.postal_code = '1234567'
       @user_purchase.valid?
-      expect(@user_purchase.errors.full_messages).to include("Postal code is invalid")
+      expect(@user_purchase.errors.full_messages).to include('Postal code is invalid')
     end
 
     it 'prefecture_idが未選択だと保存できないこと' do
       @user_purchase.prefecture_id = 1
       @user_purchase.valid?
-      expect(@user_purchase.errors.full_messages).to include("Prefecture is reserved")
+      expect(@user_purchase.errors.full_messages).to include('Prefecture is reserved')
     end
     it 'cityが空だと保存できないこと' do
       @user_purchase.city = nil
@@ -46,9 +46,9 @@ RSpec.describe UserPurchase, type: :model do
       expect(@user_purchase.errors.full_messages).to include("Phone number can't be blank")
     end
     it 'phone_numberはハイフンがあると保存できないこと' do
-      @user_purchase.phone_number = "05-234-5678"
+      @user_purchase.phone_number = '05-234-5678'
       @user_purchase.valid?
-      expect(@user_purchase.errors.full_messages).to include("Phone number is invalid")
+      expect(@user_purchase.errors.full_messages).to include('Phone number is invalid')
     end
   end
 end

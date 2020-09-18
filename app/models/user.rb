@@ -10,7 +10,7 @@ class User < ApplicationRecord
   validates :nickname, :family_name, :first_name, :family_name_kana, :first_name_kana, :birthday, presence: true
   validates :email, uniqueness: true
   validates :email, exclusion: { in: ['@'] }
-  validates :password, length: {minimum: 6}
+  validates :password, length: { minimum: 6}
   validates :password, format: { with: /\A(?=.*?[a-z])(?=.*?[\d])[a-z\d]+\z/i }
   validates :password, confirmation: true
   validates :password_confirmation, presence: true
